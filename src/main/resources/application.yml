@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: PPBackEnd
+  datasource:
+    druid:
+      driver-class-name: org.mariadb.jdbc.Driver
+      test-while-idle: true
+      validation-query: SELECT 1
+
+server:
+  port: 8000
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
