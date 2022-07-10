@@ -32,11 +32,11 @@ public class UserServiceImpl extends ServiceImpl<IUserDao,User> implements IUser
         List<User> users = userDao.selectByMap(map);
         // 如果查找到多个用户，返回登录失败，记录日志信息
         if(users.size()>1){
-            log.error("账号【"+account+"】在数据库中存在多次，请核查");
+            log.warn("账号【"+account+"】在数据库中存在多次，请核查");
             return new LoginResult(false,"数据库异常，请联系管理员",null);
         }else if(users.size()==0){
             // 如果大小为0，表示用户不存在,返回失败信息
-            return new LoginResult(false,"用户不存在。",null);
+            return new LoginResult(false,"用户【"+account  +"】不存在。",null);
         }
         // 在数据库中存在唯一的用户，获取用户的信息
         User user = users.get(0);

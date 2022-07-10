@@ -41,6 +41,7 @@ public class UserController {
     @PostMapping("/login")
     public R login(@RequestBody  LoginRequest request){
         UserServiceImpl.LoginResult result = userService.login(request.getAccount(),request.getPassword());
+        log.info(result.getMessage());
         if(result.isSuccess()){
             R r = R.ok().message(result.getMessage());
             r.data("identify",result.getIdentify());
@@ -57,10 +58,13 @@ public class UserController {
     public R getUserName(@RequestParam String account){
         String userName = userService.getUserName(account);
         if(userName==null){
-            return R.error().message("用户不存在，请检查account是否正确");
+            String message = "用户不存在，请检查account【"+account+"】是否正确";
+            log.info(message);
+            return R.error().message(message);
         }else {
-            R r = R.ok();
+            R r = R.ok().message("success");
             r.getData().put("userName", userName);
+            log.info("成功查找用户名，账号【"+account+"】");
             return r;
         }
     }
