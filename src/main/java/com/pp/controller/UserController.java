@@ -4,12 +4,12 @@ import com.pp.controller.util.R;
 import com.pp.service.IUserService;
 import com.pp.service.impl.UserServiceImpl;
 import lombok.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
+@Slf4j
 @RequestMapping("/users")
 public class UserController {
     /**
@@ -19,11 +19,6 @@ public class UserController {
     public UserController(IUserService userService) {
         this.userService = userService;
     }
-
-    /**
-     * 日志对象
-     * */
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     /**
      * 前端调用【login api】时需要传递的请求参数

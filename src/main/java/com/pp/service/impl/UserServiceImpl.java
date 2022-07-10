@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pp.dao.IUserDao;
 import com.pp.domain.User;
 import com.pp.service.IUserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,11 +16,6 @@ public class UserServiceImpl extends ServiceImpl<IUserDao,User> implements IUser
     public UserServiceImpl(IUserDao userDao) {
         this.userDao = userDao;
     }
-
-    /**
-     * 日志对象
-     * */
-    private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public LoginResult login(String account, String password) {
