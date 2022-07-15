@@ -12,5 +12,5 @@ public class User {
     String account;
     String name;
     String password;
-    String identify;
+    String role;
 }

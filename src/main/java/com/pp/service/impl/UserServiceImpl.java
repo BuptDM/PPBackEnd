@@ -1,15 +1,21 @@
 package com.pp.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pp.controller.util.R;
 import com.pp.dao.IUserDao;
 import com.pp.domain.User;
 import com.pp.service.IUserService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
+
 
 @Service
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<IUserDao,User> implements IUserService {
     // 注入userDao对象
     final IUserDao userDao;
@@ -18,41 +24,41 @@ public class UserServiceImpl extends ServiceImpl<IUserDao,User> implements IUser
     }
 
     @Override
-    public LoginResult login(String account, String password) {
-        // 按照账户在数据库中搜索
-        HashMap<String,Object> map = new HashMap<>();
-        map.put("account",account);
-        List<User> users = userDao.selectByMap(map);
-        // 如果查找到多个用户，返回登录失败，记录日志信息
-        if(users.size()>1){
-            log.warn("账号【"+account+"】在数据库中存在多次，请核查");
-            return new LoginResult(false,"数据库异常，请联系管理员",null);
-        }else if(users.size()==0){
-            // 如果大小为0，表示用户不存在,返回失败信息
-            return new LoginResult(false,"用户【"+account  +"】不存在。",null);
-        }
-        // 在数据库中存在唯一的用户，获取用户的信息
-        User user = users.get(0);
-        // 判断密码是否正确
-        if(!user.getPassword().equals(password)){
-            String message = "用户登录失败，账户【"+account+"】密码错误";
-            return new LoginResult(false,message,null);
+    public R login(LoginRequest loginRequest) {
+        //获取当前用户对应的Subject
+        Subject subject = SecurityUtils.getSubject();
+        //执行登录方法
+        subject.login(new UsernamePasswordToken(loginRequest.getAccount(),loginRequest.getPassword()));
+        //判断是否认证成功
+        if(subject.isAuthenticated()){
+            log.info("用户登录成功，account="+loginRequest.getAccount());
+            String role = getUserByAccount(loginRequest.getAccount()).getRole();
+            return R.ok().message("登录成功").data("role",role);
         }else{
-            String message = "用户登录成功，账户【"+account+"】";
-            return new LoginResult(true,message,user.getIdentify());
+            log.info("用户登录失败，account="+loginRequest.getAccount());
+            return R.error().message("登录失败");
         }
     }
 
     @Override
-    public String getUserName(String account) {
-        // 按照账户和密码的形式在数据库中搜索
+    public R getUserName(String account) {
+        User user = getUserByAccount(account);
+        if(user==null) {
+            return R.error().message("用户不存在");
+        }else {
+            return R.ok().message("查找成功").data("userName", user.getName());
+        }
+    }
+
+    @Override
+    public User getUserByAccount(String account) {
         HashMap<String,Object> map = new HashMap<>();
         map.put("account",account);
-        List<User> users = userDao.selectByMap(map);
-        // 如果大小为0，表示用户不存在,返回null
-        if(users.size()==0)
+        User user = userDao.selectByMap(map).get(0);
+        if(user==null){
+            log.warn("用户不存在，account="+account);
             return null;
-        // 返回身份标识
-        return users.get(0).getName();
+        }
+        return user;
     }
 }

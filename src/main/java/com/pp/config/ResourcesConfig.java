@@ -6,9 +6,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class ResourcesConfig implements WebMvcConfigurer {
     final  AppProperties appProperties;
-    public WebConfig(AppProperties appProperties) {
+    public ResourcesConfig(AppProperties appProperties) {
         this.appProperties = appProperties;
     }
     @Override

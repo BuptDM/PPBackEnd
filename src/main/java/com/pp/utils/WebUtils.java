@@ -1,11 +1,7 @@
 package com.pp.utils;
 
 import com.pp.config.AppProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
 
 @Component
 public class WebUtils {
@@ -15,9 +11,15 @@ public class WebUtils {
         this.appProperties = appProperties;
     }
 
-    public String getResourceUri(String directory,String fileName){
+    /**
+     * 输入静态文件的分类【files下的子路径】和文件名，返回静态文件路径
+     * @param directory 子路径
+     * @param fileName 文件名
+     * @return String 静态文件的访问路径
+     * */
+    public String getStaticResourceUri(String directory, String fileName){
         String ret = "http://";
-        ret+=appProperties.getServerIp()+":"+ appProperties.getPort()+ "/files/" + directory + "/" + fileName;
+        ret+=appProperties.getServerIp()+":"+ appProperties.getPORT()+ "/files/" + directory + "/" + fileName;
         return ret;
     }
 }
