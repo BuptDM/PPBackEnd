@@ -1,5 +1,7 @@
 package com.pp.config;
 
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,6 +45,14 @@ public class ShiroConfig {
         DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
         //关联UserRealm
         defaultWebSecurityManager.setRealm(userRealm);
+        defaultWebSecurityManager.setSessionManager(sessionManager());
         return defaultWebSecurityManager;
+    }
+
+    @Bean
+    public SessionManager sessionManager(){
+        ShiroSession shiroSession = new ShiroSession();
+        shiroSession.setSessionDAO(new EnterpriseCacheSessionDAO());
+        return shiroSession;
     }
 }
