@@ -4,8 +4,8 @@ import com.pp.controller.util.R;
 import com.pp.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @Slf4j
@@ -26,6 +26,14 @@ public class UserController {
     @PostMapping("/login")
     public R login(@RequestBody IUserService.LoginRequest request, HttpServletResponse response){
         return userService.login(request);
+    }
+
+    /**
+     * 重定向api，如果未认证或者未授权访问，直接重定向到登录界面
+     * */
+    @GetMapping("/redirect")
+    public R redirect() throws IOException {
+        return R.error().message("尚未登陆，请先登录后访问");
     }
 
     /**

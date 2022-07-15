@@ -32,8 +32,8 @@ public class ShiroConfig {
         filterMap.put("/users/login","anon");
         filterMap.put("/**","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
-        // 设置登录页面url
-        shiroFilterFactoryBean.setLoginUrl("www.baidu.com");
+        // 没有认证，进行界面跳转
+        shiroFilterFactoryBean.setLoginUrl("/users/redirect");
         return shiroFilterFactoryBean;
     }
 
