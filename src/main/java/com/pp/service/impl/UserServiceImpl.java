@@ -11,7 +11,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 
@@ -32,6 +31,7 @@ public class UserServiceImpl extends ServiceImpl<IUserDao,User> implements IUser
         subject.login(new UsernamePasswordToken(loginRequest.getAccount(),loginRequest.getPassword()));
         //判断是否认证成功
         if(subject.isAuthenticated()){
+            // TODO 业务逻辑
             log.info("用户登录成功，account="+loginRequest.getAccount());
             String role = getUserByAccount(loginRequest.getAccount()).getRole();
             R r = R.ok().message("登录成功").data("role",role);
