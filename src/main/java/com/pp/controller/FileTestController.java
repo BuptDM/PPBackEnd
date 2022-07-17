@@ -4,9 +4,10 @@ import com.pp.config.AppProperties;
 import com.pp.controller.util.R;
 import com.pp.utils.WebUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 
@@ -14,15 +15,25 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/file-test")
 public class FileTestController {
-    @Autowired
-    AppProperties appProperties;
-    @Autowired
-    WebUtils webUtils;
+    final AppProperties appProperties;
+    final WebUtils webUtils;
+    public FileTestController(AppProperties appProperties, WebUtils webUtils) {
+        this.appProperties = appProperties;
+        this.webUtils = webUtils;
+    }
 
     @PostMapping
-    public R upload( @RequestParam("files")MultipartFile file){
+    public R upload(MultipartFile file, HttpServletRequest request){
+        if(file==null){
+            return R.error().message("没有上传文件");
+        }
+        log.info(request.getParameter("test"));
         try{
             String fileName = file.getOriginalFilename();
+            File directory = new File(appProperties.getTestFilePath());
+            if(!directory.exists()){
+                directory.mkdir();
+            }
             File dest = new File(appProperties.getTestFilePath()+fileName);
             file.transferTo(dest);
             assert fileName != null;

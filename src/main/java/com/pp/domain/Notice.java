@@ -1,5 +1,7 @@
 package com.pp.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import java.sql.Timestamp;
 
@@ -9,7 +11,8 @@ import java.sql.Timestamp;
  * */
 @Data
 public class Notice {
-    private int id;
+    @TableId(type= IdType.AUTO)
+    private long id;
     private String title;//　标题
     private String summary;// 文章摘要
     private Timestamp postTime;// 通知发表的时间

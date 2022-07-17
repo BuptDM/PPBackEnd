@@ -24,7 +24,7 @@ public class UserController {
     * @param request 前端调用接口传递的请求体（【请求体】）
     * */
     @PostMapping("/login")
-    public R login(@RequestBody IUserService.LoginRequest request, HttpServletResponse response){
+    public R login(@RequestBody IUserService.LoginRequest request){
         return userService.login(request);
     }
 
@@ -32,7 +32,7 @@ public class UserController {
      * 重定向api，如果未认证或者未授权访问，直接重定向到登录界面
      * */
     @GetMapping("/redirect")
-    public R redirect() throws IOException {
+    public R redirect() {
         return R.error().message("尚未登陆，请先登录后访问");
     }
 

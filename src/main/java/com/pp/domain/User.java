@@ -1,5 +1,7 @@
 package com.pp.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
@@ -8,7 +10,8 @@ public class User {
     public static String TEACHER = "teacher";
     public static String STUDENT = "student";
     // 字段
-    int id;
+    @TableId(type= IdType.AUTO)
+    long id;
     String account;
     String name;
     String password;
