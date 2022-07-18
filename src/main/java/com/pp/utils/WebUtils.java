@@ -17,7 +17,7 @@ public class WebUtils {
      * @param fileName 文件名
      * @return String 静态文件的访问路径
      * */
-    public String getStaticResourceUri(String directory, String fileName){
+    public  String getStaticResourceUri(String directory, String fileName){
         String ret = "http://";
         ret+=appProperties.getServerIp()+":"+ appProperties.getPORT()+ "/files/" + directory + "/" + fileName;
         return ret;

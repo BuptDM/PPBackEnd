@@ -17,7 +17,6 @@ import java.util.HashMap;
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<IUserDao,User> implements IUserService {
-    // 注入userDao对象
     final IUserDao userDao;
     public UserServiceImpl(IUserDao userDao) {
         this.userDao = userDao;

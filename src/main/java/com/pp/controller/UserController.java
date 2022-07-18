@@ -4,8 +4,6 @@ import com.pp.controller.util.R;
 import com.pp.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @RestController
 @Slf4j

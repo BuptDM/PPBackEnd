@@ -3,7 +3,6 @@ package com.pp.controller;
 import com.pp.controller.util.R;
 import com.pp.service.IHelpService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +20,19 @@ public class HelpController {
         this.helpService = helpService;
     }
 
+    /**
+     * 通知概览，获取最近发布的三条数据
+     * @return 最近发布的三条数据
+     */
     @PostMapping("/getT")
     public R getHelpArticleT(){
         return helpService.getThreeHelpArticle();
     }
 
+    /**
+     * 获取当前所有的通知文章，无参数
+     * @return 返回所有的通知文章
+     */
     @PostMapping("/getAll")
     public R getAllArticles(){
         return helpService.getAllArticles();
@@ -50,9 +57,14 @@ public class HelpController {
         return helpService.addArticle(file,request);
     }
 
+    /**
+     * 修改文章
+     * @param  file 修改后的文件
+     * @return 返回是否修改成功，以及修改后的数据库记录;request中包含filename,id,title,summary
+     */
     @PostMapping("/modify")
-    public R modifyArticle() {
-        return helpService.modifyArticle();
+    public R modifyArticle(MultipartFile file, HttpServletRequest request) {
+        return helpService.modifyArticle(file,request);
     }
 
     /**
@@ -64,6 +76,11 @@ public class HelpController {
         return helpService.deleteArticle(id);
     }
 
+
+    /**
+     * 获取推荐文章列表
+     * @return 暂时返回最近发布的三篇文章
+     */
     @PostMapping("/recommend")
     public R recommendArticles(){
         return helpService.getRecommendArticles();
