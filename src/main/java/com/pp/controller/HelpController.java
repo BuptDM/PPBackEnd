@@ -82,7 +82,7 @@ public class HelpController {
      * @return 暂时返回最近发布的三篇文章
      */
     @PostMapping("/recommend")
-    public R recommendArticles(){
-        return helpService.getRecommendArticles();
+    public R recommendArticles(String id){
+        return helpService.getRecommendArticles(id);
     }
 }

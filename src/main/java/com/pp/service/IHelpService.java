@@ -52,5 +52,5 @@ public interface IHelpService extends IService<HelpArticle> {
      * 获取推荐文章，返回列表
      * @return 暂时返回最近发布的三篇文章
      */
-    R getRecommendArticles();
+    R getRecommendArticles(String id);
 }

@@ -19,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -70,6 +67,10 @@ public class HelpServiceImpl extends ServiceImpl<IHelpDao, HelpArticle> implemen
         // 判断你传入的文件是不是为空
         if(file==null)
             return R.error().message("文件为空，请检查");
+        // 如果不是markdown文件，返回提示信息
+        if(!Objects.requireNonNull(file.getOriginalFilename()).toLowerCase().endsWith(".md")){
+            return R.error().message("必须上传markdown文件");
+        }
         // 生成新的文件名
         HashMap<String,Object> hashMap = new HashMap<>();
         String newFileName;
@@ -97,6 +98,7 @@ public class HelpServiceImpl extends ServiceImpl<IHelpDao, HelpArticle> implemen
             log.info(helpArticle.toString());
             return R.ok().message("存储成功").data("article",helpArticle);
         }catch (Exception e){
+            e.printStackTrace();
             return R.error().message("服务器内部错误，文件上传失败");
         }
     }
@@ -154,13 +156,21 @@ public class HelpServiceImpl extends ServiceImpl<IHelpDao, HelpArticle> implemen
         return R.ok().message("删除成功");
     }
     @Override
-    public R getRecommendArticles() {
+    public R getRecommendArticles(String id) {
         // 拿到数据库中所有的文章信息
         List<HelpArticle> list = helpDao.selectList(null);
         if(list!=null){
+            // 去除当前文章
+            for(int i=0;i<list.size();i++){
+                if(list.get(i).getId()==Integer.parseInt(id)){
+                    list.remove(i);
+                    break;
+                }
+            }
             // 按照发表时间进行排序
             list.sort(Comparator.comparing(HelpArticle::getPostTime));
-            return R.ok().message("查找成功").data("list",list.size()<=3?list:list.subList(0,3));
+            // 返回值给前端
+            return R.ok().message("查找成功").data("list",list.size()<=3?list:list.subList(list.size()-3,list.size()));
         }else{
             return R.error().message("服务器错误，请联系管理员");
         }
