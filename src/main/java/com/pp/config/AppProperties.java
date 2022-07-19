@@ -11,10 +11,10 @@ import java.applet.AppletContext;
 @ConfigurationProperties(prefix = "pp")
 @Data
 public class AppProperties {
-    String testFilePath; // 测试文件的路径
     String fileDirectory;// 静态文件的根目录
-    String serverIp; // 服务器IP地址
+    String noticeFilePath;// 帮助文章静态路径
     String helpFilePath;// 帮助文章静态路径
+    String serverIp; // 服务器IP地址
     @Value("${server.port}")
     String PORT; // 程序运行的端口
 }

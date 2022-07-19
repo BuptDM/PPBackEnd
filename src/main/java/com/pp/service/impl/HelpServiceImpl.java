@@ -39,7 +39,8 @@ public class HelpServiceImpl extends ServiceImpl<IHelpDao, HelpArticle> implemen
         if(list!=null){
             // 按照发表时间进行排序
             list.sort(Comparator.comparing(HelpArticle::getPostTime));
-            return R.ok().message("查找成功").data("list",list.size()<=3?list:list.subList(0,3));
+            // 返回值给前端
+            return R.ok().message("查找成功").data("list",list.size()<=3?list:list.subList(list.size()-3,list.size()));
         }else{
             return R.error().message("服务器错误，请联系管理员");
         }
