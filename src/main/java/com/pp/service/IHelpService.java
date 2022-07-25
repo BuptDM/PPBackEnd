@@ -1,13 +1,11 @@
 package com.pp.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.pp.controller.util.R;
-import com.pp.domain.HelpArticle;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface IHelpService extends IService<HelpArticle> {
+public interface IHelpService {
     /**
      * 通知概览，获取最近发布的三条数据
      * @return 最近发布的三条数据，返回列表

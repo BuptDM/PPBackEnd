@@ -23,7 +23,7 @@ import java.util.*;
 
 @Service
 @Slf4j
-public class HelpServiceImpl extends ServiceImpl<IHelpDao, HelpArticle> implements IHelpService {
+public class HelpServiceImpl implements IHelpService {
     final WebUtils webUtils;
     final IHelpDao helpDao;
     final AppProperties appProperties;

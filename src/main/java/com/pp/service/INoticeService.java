@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface INoticeService extends IService<Notice> {
+public interface INoticeService{
     /**
      * 添加文章
      * @param file md文件

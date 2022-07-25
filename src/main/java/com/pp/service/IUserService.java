@@ -1,13 +1,12 @@
 package com.pp.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.pp.controller.util.R;
 import com.pp.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public interface IUserService extends IService<User> {
+public interface IUserService {
     /**
      * 登录的请求数据类
      * */

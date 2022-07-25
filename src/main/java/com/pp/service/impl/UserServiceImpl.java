@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 @Service
 @Slf4j
-public class UserServiceImpl extends ServiceImpl<IUserDao,User> implements IUserService {
+public class UserServiceImpl implements IUserService {
     final IUserDao userDao;
     public UserServiceImpl(IUserDao userDao) {
         this.userDao = userDao;
@@ -27,11 +27,18 @@ public class UserServiceImpl extends ServiceImpl<IUserDao,User> implements IUser
         //获取当前用户对应的Subject
         Subject subject = SecurityUtils.getSubject();
         //执行登录方法
-        subject.login(new UsernamePasswordToken(loginRequest.getAccount(),loginRequest.getPassword()));
+        try {
+            subject.login(new UsernamePasswordToken(loginRequest.getAccount(), loginRequest.getPassword()));
+        }catch (Exception e){
+            log.info("用户登录失败，account="+loginRequest.getAccount());
+            return R.error().message("登录失败");
+        }
         //判断是否认证成功
         if(subject.isAuthenticated()){
             // 设置登录有效期
             subject.getSession().setTimeout(1000*60*60*24*7);
+            // 将用户id插入到session中
+            subject.getSession().setAttribute("userID",loginRequest.getAccount());
             // 返回值给前端
             log.info("用户登录成功，account="+loginRequest.getAccount());
             String role = getUserByAccount(loginRequest.getAccount()).getRole();

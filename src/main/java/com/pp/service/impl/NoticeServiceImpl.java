@@ -23,7 +23,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class NoticeServiceImpl extends ServiceImpl<INoticeDao, Notice> implements INoticeService {
+public class NoticeServiceImpl implements INoticeService {
 
     private final INoticeDao noticeDao;
     private final WebUtils webUtils;
