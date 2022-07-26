@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 @Data
 public class KMeans {
     /*算法ID，对应数据库algorithm表中的id字段*/
-    public static int KMeansID = 10001;
+    public static int algorithmID = 10001;
     /*聚类算法的分数评价*/
     float score;
     /*聚类算法的实例*/

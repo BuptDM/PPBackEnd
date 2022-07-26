@@ -5,5 +5,5 @@ import com.pp.domain.FreeProgramming;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface IFreeProgramming extends BaseMapper<FreeProgramming> {
+public interface IFreeProgrammingDao extends BaseMapper<FreeProgramming> {
 }

@@ -13,6 +13,6 @@ public class FreeProgramming {
     String studentId;
     int experimentId;
     String codeUrl;
-    int score;
+    float score;
     Timestamp time;
 }

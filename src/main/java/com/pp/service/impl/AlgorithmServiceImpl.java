@@ -4,6 +4,8 @@ import com.pp.algorithm.KMeans;
 import com.pp.config.AppProperties;
 import com.pp.controller.util.R;
 import com.pp.dao.IAlgorithmCallDao;
+import com.pp.dao.IAlgorithmDao;
+import com.pp.domain.Algorithm;
 import com.pp.domain.AlgorithmCall;
 import com.pp.service.IAlgorithmService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +19,9 @@ import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -29,7 +31,8 @@ public class AlgorithmServiceImpl implements IAlgorithmService {
     AppProperties appProperties;
     @Autowired
     IAlgorithmCallDao algorithmCallDao;
-
+    @Autowired
+    IAlgorithmDao algorithmDao;
     @Override
     public R kmeans(MultipartFile file, HttpServletRequest request) {
         try {
@@ -59,7 +62,7 @@ public class AlgorithmServiceImpl implements IAlgorithmService {
             // 生成数据库记录
             AlgorithmCall algorithmCall = new AlgorithmCall();
             algorithmCall.setStudentId((String)SecurityUtils.getSubject().getSession().getAttribute("userID"));
-            algorithmCall.setAlgorithmId(KMeans.KMeansID);
+            algorithmCall.setAlgorithmId(KMeans.algorithmID);
             algorithmCall.setParam(kMeans.getParamJsonStr());
             algorithmCall.setResult(kMeans.getResult());
             algorithmCall.setPostTime(new Timestamp(System.currentTimeMillis()));
@@ -73,5 +76,10 @@ public class AlgorithmServiceImpl implements IAlgorithmService {
             e.printStackTrace();
             return R.error().message("后端服务器异常，请联系管理员");
         }
+    }
+
+    @Override
+    public List<Algorithm> allAlgorithm() {
+        return algorithmDao.selectList(null);
     }
 }

@@ -3,6 +3,7 @@ package com.pp.controller;
 import com.pp.controller.util.R;
 import com.pp.service.IHelpService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,12 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RequestMapping("/help")
 public class HelpController {
-    final IHelpService helpService;
-
-    public HelpController(IHelpService helpService) {
-        this.helpService = helpService;
-    }
-
+    @Autowired
+    IHelpService helpService;
     /**
      * 首页概览，获取最近发布的三条数据
      * @return 最近发布的三条数据
@@ -28,7 +25,6 @@ public class HelpController {
     public R getHelpArticleT(){
         return helpService.getThreeHelpArticle();
     }
-
     /**
      * 获取当前所有的通知文章，无参数
      * @return 返回所有的通知文章
@@ -37,7 +33,6 @@ public class HelpController {
     public R getAllArticles(){
         return helpService.getAllArticles();
     }
-
     /**
      * 根据ID查找帮助文章
      * @param id 文章 的id
@@ -46,7 +41,6 @@ public class HelpController {
     public R getArticleByID(String id){
         return helpService.getArticleByID(id);
     }
-
     /**
      * 添加帮助文章，传入文件、标题、摘要
      * @param file 传输的文件
@@ -56,7 +50,6 @@ public class HelpController {
     public R addArticle(MultipartFile file, HttpServletRequest request){
         return helpService.addArticle(file,request);
     }
-
     /**
      * 修改文章
      * @param  file 修改后的文件
@@ -66,7 +59,6 @@ public class HelpController {
     public R modifyArticle(MultipartFile file, HttpServletRequest request) {
         return helpService.modifyArticle(file,request);
     }
-
     /**
      * 删除通知文件
      * @param id  需要删除的帮助文章的 id
@@ -75,8 +67,6 @@ public class HelpController {
     public R deleteArticle(String id){
         return helpService.deleteArticle(id);
     }
-
-
     /**
      * 获取推荐文章列表
      * @return 暂时返回最近发布的三篇文章

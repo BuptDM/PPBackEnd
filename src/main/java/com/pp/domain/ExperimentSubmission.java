@@ -13,6 +13,6 @@ public class ExperimentSubmission {
     String studentId;
     int experimentId;
     String codeUrl;
-    float score;
+    Float score;
     Timestamp time;
 }
