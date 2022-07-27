@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 public interface IExperimentService {
     /**
      * 查询所有实验
-     *
      * @return  实验表格所有记录
      */
     R getAllExperiment();
+
     /**
      * 添加实验
      * @param file md文件
@@ -21,4 +21,20 @@ public interface IExperimentService {
      * */
     R addExperiment(MultipartFile file, HttpServletRequest request);
 
+    /**
+     * 修改实验
+     */
+    R modifyExperiment(MultipartFile file,HttpServletRequest request);
+
+    /**
+     * 删除实验
+     */
+    R deleteExperiment(String id);
+
+
+    /**
+     * 查找实验
+     *
+     */
+    R selectByID(String id);
 }
