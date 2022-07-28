@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pp.config.AppProperties;
 import com.pp.controller.util.R;
+import com.pp.dao.IAlgorithmDao;
 import com.pp.dao.IEARelationDao;
 import com.pp.dao.IExperimentDao;
+import com.pp.domain.Algorithm;
 import com.pp.domain.EaRelation;
 import com.pp.domain.Experiment;
 import com.pp.service.IExperimentService;
@@ -20,10 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -36,6 +35,18 @@ public class ExperimentServiceImpl extends ServiceImpl<IExperimentDao, Experimen
     AppProperties appProperties;
     @Autowired
     IEARelationDao ieaRelationDao;
+    @Autowired
+    IAlgorithmDao algorithmDao;
+
+    @Override
+    public R getExperimentFP() {
+        /*查询所有实验*/
+        List<Experiment> experiments = experimentDao.selectList(new LambdaQueryWrapper<Experiment>().orderByDesc(Experiment::getPostTime));
+        if(experiments.size()>3)
+            return R.ok().data("result",experiments.subList(0,3));
+        return R.ok().data("result",experiments);
+    }
+
     @Override
     public R getAllExperiment() {
         List<Experiment> list = experimentDao.selectList(null);
@@ -156,7 +167,31 @@ public class ExperimentServiceImpl extends ServiceImpl<IExperimentDao, Experimen
         /*判断实验是否为空*/
         if(e==null)
             return R.error().message("id错误，请检查!");
+        /*查找相关算法*/
+        List<Algorithm> algorithms = getAllRelatedAlgorithms(id);
+        /*查找其他实验*/
+        List<Experiment> experiments = experimentDao.selectList(null);
+        experiments.remove(e);
         /*返回值给前端*/
-        return R.ok().data("result",e);
+        R r = R.ok().data("experiment",e);
+        r.data("algorithms",algorithms);
+        r.data("otherExperiments",experiments);
+        return r;
+    }
+
+    /**
+     * 返回某个实验的相关算法
+     * @param experimentID 实验的id
+     * @return 相关算法的列表
+     */
+    List<Algorithm> getAllRelatedAlgorithms(String experimentID){
+        // 查询所有相关算法的ID
+        List<EaRelation> relations = ieaRelationDao.selectList(new LambdaQueryWrapper<EaRelation>().eq(EaRelation::getExperimentId,experimentID));
+        // 所有相关实验
+        ArrayList<Algorithm> algorithms  = new ArrayList<>();
+        relations.forEach(e->{
+            algorithms.add(algorithmDao.selectById(e.getAlgorithmId()));
+        });
+        return algorithms;
     }
 }

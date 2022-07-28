@@ -102,6 +102,10 @@ public class SubmissionServiceImpl extends ServiceImpl<IExperimentSubmissionDao,
     }
     @Override
     public R queryForStudent(String studentID,String experimentID) {
+        // 判断是不是学生
+        User user1 = userDao.selectOne(new LambdaQueryWrapper<User>().eq(User::getAccount,studentID));
+        if(!user1.getRole().equals("student"))
+            return R.error().message("学生ID错误");
         // 查询所有相关算法
         List<Algorithm> allRelatedAlgorithms = getAllRelatedAlgorithms(experimentID);
         // 声明返回的map对象
@@ -118,6 +122,16 @@ public class SubmissionServiceImpl extends ServiceImpl<IExperimentSubmissionDao,
         // 返回值给前端
         return R.ok().data("result",hashMap).data("algorithms",allRelatedAlgorithms);
     }
+
+    @Override
+    public R querySubmission(String studentID, String experimentID) {
+        LambdaQueryWrapper<ExperimentSubmission> qw = new LambdaQueryWrapper<>();
+        qw.eq(ExperimentSubmission::getStudentId,studentID);
+        qw.eq(ExperimentSubmission::getExperimentId,experimentID);
+        ExperimentSubmission submission =  experimentSubmissionDao.selectOne(qw);
+        return R.ok().data("submission",submission);
+    }
+
     /*获取学生某实验最终评分*/
     public Float getFinalScore(String studentID,String experimentID){
         LambdaQueryWrapper<ExperimentSubmission> qw1 = new LambdaQueryWrapper<>();

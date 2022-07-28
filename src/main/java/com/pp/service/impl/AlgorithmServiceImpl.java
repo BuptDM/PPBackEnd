@@ -1,12 +1,15 @@
 package com.pp.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.pp.algorithm.KMeans;
 import com.pp.config.AppProperties;
 import com.pp.controller.util.R;
 import com.pp.dao.IAlgorithmCallDao;
 import com.pp.dao.IAlgorithmDao;
+import com.pp.dao.IUserDao;
 import com.pp.domain.Algorithm;
 import com.pp.domain.AlgorithmCall;
+import com.pp.domain.User;
 import com.pp.service.IAlgorithmService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -33,9 +36,18 @@ public class AlgorithmServiceImpl implements IAlgorithmService {
     IAlgorithmCallDao algorithmCallDao;
     @Autowired
     IAlgorithmDao algorithmDao;
+    @Autowired
+    IUserDao userDao;
     @Override
     public R kmeans(MultipartFile file, HttpServletRequest request) {
         try {
+            // 检查是不是学生身份
+            String userID = String.valueOf(SecurityUtils.getSubject().getSession().getAttribute("userID"));
+            LambdaQueryWrapper<User> qw = new LambdaQueryWrapper<>();
+            qw.eq(User::getAccount,userID);
+            User user = userDao.selectOne(qw);
+            if(!user.getRole().equals("student"))
+                return R.error().message("只有学生可以调用算法");
             // 检查文件格式
             if(file==null){
                 return R.error().message("请上传数据");
@@ -60,13 +72,15 @@ public class AlgorithmServiceImpl implements IAlgorithmService {
             kMeans.setData(saver.getInstances());
             kMeans.run();
             // 生成数据库记录
+            String studentID = (String)SecurityUtils.getSubject().getSession().getAttribute("userID");
             AlgorithmCall algorithmCall = new AlgorithmCall();
-            algorithmCall.setStudentId((String)SecurityUtils.getSubject().getSession().getAttribute("userID"));
+            algorithmCall.setStudentId(studentID);
             algorithmCall.setAlgorithmId(KMeans.algorithmID);
             algorithmCall.setParam(kMeans.getParamJsonStr());
             algorithmCall.setResult(kMeans.getResult());
             algorithmCall.setPostTime(new Timestamp(System.currentTimeMillis()));
             algorithmCall.setScore(kMeans.getScore());
+            algorithmCall.setStudentName(user.getName());
             // 将算法调用记录存储到数据库中
             algorithmCallDao.insert(algorithmCall);
             // 返回数据给前端

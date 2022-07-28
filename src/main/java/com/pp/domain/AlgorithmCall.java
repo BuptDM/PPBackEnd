@@ -11,6 +11,7 @@ public class AlgorithmCall {
     @TableId(type = IdType.AUTO)
     int id;
     String studentId;
+    String studentName;
     int algorithmId;
     String param;// 是一个Json字符串
     String result;

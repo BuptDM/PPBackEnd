@@ -64,4 +64,12 @@ public class ExperimentController {
     public R selectById(String id){
         return experimentService.selectByID(id);
     }
+
+    /**
+     * 首页的实验概述
+     */
+    @GetMapping("/getFP")
+    public R getExperimentFP(){
+        return experimentService.getExperimentFP();
+    }
 }

@@ -39,10 +39,15 @@ public class SubmissionController {
         return R.ok().data("result",experimentSubmissionService.getExperimentSubmissionByScore(ifScore,experimentID));
     }
     /**
-     * 查询某同学某实验的完成情况
+     * 查询某同学某实验的完成情况(管理员端)
      */
     @PostMapping("/queryForStudent")
     public R queryForStudent(String studentID,String experimentID){
         return experimentSubmissionService.queryForStudent(studentID,experimentID);
+    }
+
+    @PostMapping("/querySubmissionForS")
+    public R querySubmission(String studentID,String experimentID){
+        return experimentSubmissionService.querySubmission(studentID,experimentID);
     }
 }

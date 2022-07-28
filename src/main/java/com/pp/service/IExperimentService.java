@@ -23,18 +23,26 @@ public interface IExperimentService {
 
     /**
      * 修改实验
+     * @param file 新说明文档
      */
     R modifyExperiment(MultipartFile file,HttpServletRequest request);
 
     /**
      * 删除实验
+     * @param id 需要删除的实验的id
      */
     R deleteExperiment(String id);
 
 
     /**
      * 查找实验
-     *
+     * @param id 需要查询实验的id
      */
     R selectByID(String id);
+
+    /**
+     * 首页实验概述接口
+     * @return 按照发布时间最近的前三条记录
+     */
+    R getExperimentFP();
 }

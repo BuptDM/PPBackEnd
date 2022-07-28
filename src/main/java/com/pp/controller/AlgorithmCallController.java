@@ -16,20 +16,34 @@ public class AlgorithmCallController {
     private IAlgorithmCallService algorithmCallService;
     /**
      * 查询特定算法的调用情况
-     * param algorithmId
-     * return 对应算法所有同学的调用记录列表
+     * @return 对应算法所有同学的调用记录列表
      */
     @PostMapping("/select")
     public R selectAlgorithmCall(Integer algorithmId){
-        return R.ok().data("result", algorithmCallService.selectAlgorithmCall(algorithmId));
+        return  algorithmCallService.selectAlgorithmCall(algorithmId);
     }
     /**
      * 算法排行榜
-     * param: algorithm-id
-     * return: 该届学生、该算法的所有提交记录，按照score排序之后的列表
+     * @return  该届学生、该算法的所有提交记录，按照score排序之后的列表
      */
     @PostMapping("/order")
     public R selectAlgorithmCallByScore(Integer algorithmId){
-        return R.ok().data("result",algorithmCallService.selectAlgorithmCallOrderByScore(algorithmId) );
+        return algorithmCallService.selectAlgorithmCallOrderByScore(algorithmId);
+    }
+
+    /**
+     * 查看特定同学，特定算法的调用记录
+     */
+    @PostMapping("/getRecordForStudent")
+    public R getRecordForStudent(String studentID,String algorithmID){
+        return algorithmCallService.getRecordForStudent(studentID,algorithmID);
+    }
+
+    /**
+     * 查看特定同学，特定算法的最高分数
+     */
+    @PostMapping("/getScoreForStudent")
+    public R getScoreForStudent(String studentID,String algorithmID){
+        return algorithmCallService.getScoreForStudent(studentID,algorithmID);
     }
 }

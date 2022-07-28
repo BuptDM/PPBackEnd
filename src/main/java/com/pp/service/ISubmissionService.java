@@ -11,4 +11,6 @@ public interface ISubmissionService {
     R getExperimentSubmissionByScore(Boolean ifScore,String experimentID);
 
     R queryForStudent(String studentID,String experimentID);
+
+    R querySubmission(String studentID,String experimentID);
 }
